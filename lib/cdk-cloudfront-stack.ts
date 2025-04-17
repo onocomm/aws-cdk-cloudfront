@@ -1,4 +1,4 @@
-import { Stack, StackProps, CfnOutput, RemovalPolicy } from 'aws-cdk-lib';
+import { Stack, StackProps, CfnOutput, Duration, RemovalPolicy } from 'aws-cdk-lib';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as certificatemanager from 'aws-cdk-lib/aws-certificatemanager';
@@ -52,6 +52,21 @@ export class CdkCloudFrontStack extends Stack {
       accessControl: s3.BucketAccessControl.LOG_DELIVERY_WRITE,
       removalPolicy: Stage === 'production' ? RemovalPolicy.RETAIN : RemovalPolicy.DESTROY,
     });
+
+    // ✅ CloudFrontのカスタムキャッシュポリシーを作成する場合
+    /*
+    const customCachePolicy = new cloudfront.CachePolicy(this, 'CustomCachePolicy', {
+      cachePolicyName: `CustomCachePolicy`,
+      defaultTtl: Duration.minutes(5),  // デフォルトTTL 5分
+      minTtl: Duration.seconds(1),    // 最小TTL 1秒
+      maxTtl: Duration.days(365),       // 最大TTL 365日
+      cookieBehavior: cloudfront.CacheCookieBehavior.none(), // Cookieなし
+      headerBehavior: cloudfront.CacheHeaderBehavior.none(), //ヘッダーなし
+      queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(), // すべてのクエリストリングをキャッシュキーに含める
+      enableAcceptEncodingBrotli: true, // Brotli圧縮を有効化
+      enableAcceptEncodingGzip: true,   // Gzip圧縮を有効化
+    });
+    */
 
     // ✅ デフォルトオリジンの設定
     const origin = DefaultOriginType === 'S3' ? 
