@@ -135,6 +135,7 @@ export class CdkCloudFrontStack extends Stack {
       priceClass: cloudfront.PriceClass.PRICE_CLASS_ALL,
       domainNames: DomainNames,
       certificate: certificate,
+      //webAclId: webAcl.attrArn, // WAFをアタッチ
       logBucket: logBucket,
       logFilePrefix: LogFilePrefix,
       comment: Description,
